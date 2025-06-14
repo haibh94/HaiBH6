@@ -1,0 +1,28 @@
+3. Results & Analysis
+(Trước khi index)
+Query 1 (price > 500): 35-40 ms
+Query 2 (electronics đã được sắp xếp): 70-80 ms
+Query 3 (group theo manufacturer): 50-55 ms
+
+(Sau khi index)
+Query 1 (price > 500): 25-30 ms
+Query 2 (electronics đã được sắp xếp): 12-18 ms
+Query 3 (group theo manufacturer): 48-52 ms
+
+Explain() cho thấy số record được scan giảm sau khi index
+Index được sử dụng hiệu quả cho lọc + sắp xếp
+
+4. Brief report
+Hiệu suất MongoDB được phân tích bằng explain() và đo thời gian thực thi.
+Các query ban đầu (không có index) cho thấy số lượng scan record lớn và thời gian execute dài.
+Ba cách index chính được áp dụng:
+  1. Index một trường trên 'category'
+  2. Index tổng hợp trên 'category' và 'price'
+  3. Text idnex trên 'description'
+//
+Index giúp cải thiện đáng kể filter + sort.
+Pipeline aggregation như $group ít được hưởng lợi từ Index.
+
+5. Đề xuất optimization
+- Tránh tạo quá nhiều Index, nên theo dõi Index được sử dụng thường xuyên
+- Cân nhắc tối ưu hóa schema nếu câu query thay đổi
